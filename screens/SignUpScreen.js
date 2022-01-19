@@ -6,35 +6,36 @@ import firebase from '../database/firebaseDB';
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-const LoginScreen = ({ navigation }) => {
+const SignUpScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 
-	function login() {
+
+	function signUp() {
 		console.log("Input email value : " + email);
 		console.log("Input password value :" + password);
 
-		Keyboard.dismiss()
+		Keyboard.dismiss();
 		auth
-			.signInWithEmailAndPassword(email, password)
-			.then(({ userCredential }) => {
-				console.log('signed in!')
-				setError("");
-				navigation.navigate("Chat");
+			.createUserWithEmailAndPassword(email, password)
+			.then (({userCredential}) => {
+				console.log('Signed up');
+				setError("Signed up successfully!");
 				setEmail("");
 				setPassword("");
 			})
+			.then (() => navigation.navigate("Login"))
 			.catch((error) => {
 				setError("Error Message: " + error.message);
-			})
+			});
 	}
-
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View style={styles.container}>
 				<Text style={styles.titleStyle}>Chat-App</Text>
+                <Text style={[styles.labelStyle, {marginBottom: 10, color: "green"}]}>Sign Up for New User</Text>
 
 				<Text style={styles.labelStyle}>Email:</Text>
 				<TextInput
@@ -58,16 +59,9 @@ const LoginScreen = ({ navigation }) => {
 				<View style={styles.buttonsStyle}>
 					<TouchableOpacity
 						style={styles.buttonStyle}
-						onPress={login}
+						onPress={signUp}
 					>
-						<Text style={styles.buttonTextStyle}>Login</Text>
-					</TouchableOpacity>
-
-					<TouchableOpacity
-						style={[styles.buttonStyle, {backgroundColor:"cadetblue"}]}
-						onPress={() => navigation.navigate("Sign Up")}
-					>
-						<Text style={styles.buttonTextStyle}>Sign Up</Text>
+						<Text style={styles.buttonTextStyle}>Sign up</Text>
 					</TouchableOpacity>
 				</View>
 
@@ -77,19 +71,19 @@ const LoginScreen = ({ navigation }) => {
 	);
 }
 
-export default LoginScreen;
+export default SignUpScreen;
 
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#fff',
-		//alignItems: 'center',
 		justifyContent: 'center',
 		marginLeft: 20,
 	},
 
 	titleStyle: {
+        color: "green",
 		fontSize: 24,
 		fontWeight: "bold",
 		marginBottom: 20,
@@ -102,6 +96,7 @@ const styles = StyleSheet.create({
 	labelStyle: {
 		fontSize: 18,
 		fontWeight: "bold",
+        color: "green",
 	},
 
 	errorLabelStyle: {
@@ -124,10 +119,9 @@ const styles = StyleSheet.create({
 
 	buttonStyle: {
 		padding: 10,
-		backgroundColor: 'blue',
-		alignItems: "center",
-		marginRight: 20,
-		justifyContent: "space-between",
+		backgroundColor: 'cadetblue',
+		//alignItems: "center",
+		justifyContent: 'space-between',
 
 	},
 

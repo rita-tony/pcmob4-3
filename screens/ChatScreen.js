@@ -35,10 +35,13 @@ const ChatScreen = ({ navigation }) => {
 			});
 
 		firebase.auth().onAuthStateChanged((user) => {
+			console.log("user: " + user)
 			if (user) {
+				console.log("login state user: " + user)
 				// logged in 
 				navigation.navigate("Chat", { id: user.id, email: user.email })
 			} else {
+				console.log("logout state user: " + user)
 				// logged out, get kicked back to the login page
 				navigation.navigate('Login')
 			}
@@ -72,7 +75,7 @@ const ChatScreen = ({ navigation }) => {
 		db.add(newMessages[0]);
 	}
 
-	console.log(firebase.auth());
+	//console.log(firebase.auth());
 
 	return (
 		<GiftedChat
